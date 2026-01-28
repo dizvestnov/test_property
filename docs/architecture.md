@@ -1,475 +1,476 @@
-# Архитектура проекта PPA Phuket
+# PPA Phuket Project Architecture
 
-## Обзор
+## Overview
 
-Проект представляет собой Next.js 16 приложение для отображения каталога объектов недвижимости с возможностью переключения валют. Приложение использует App Router, серверные компоненты для SSR и клиентские компоненты для интерактивности.
+The project is a Next.js 16 application for displaying a catalog of real estate properties with currency switching capability. The application uses App Router, server components for SSR, and client components for interactivity.
 
-## Технологический стек
+## Technology Stack
 
-- **Next.js 16** - React фреймворк с App Router
-- **TypeScript** - типизированный JavaScript (strict mode)
-- **Tailwind CSS** - утилитарный CSS фреймворк
-- **Shadcn UI** - компоненты интерфейса на базе Radix UI
-- **Bun** - пакетный менеджер и runtime
-- **Lucide React** - библиотека иконок
+- **Next.js 16** - React framework with App Router
+- **TypeScript** - typed JavaScript (strict mode)
+- **Tailwind CSS** - utility-first CSS framework
+- **Shadcn UI** - UI components based on Radix UI
+- **Bun** - package manager and runtime
+- **Lucide React** - icon library
 
-## Структура проекта
+## Project Structure
 
-**Важно**: Структура соответствует рекомендациям Next.js 16 App Router для масштабируемых проектов:
-- `components/` на корневом уровне - общие переиспользуемые компоненты приложения
-  - Компоненты приложения (Header, PropertyCard, CurrencySelect, PriceDisplay) - в корне `components/`
-  - `components/ui/` - переиспользуемые UI компоненты библиотеки (Shadcn UI)
-- `lib/` на корневом уровне - для общих утилит, используемых по всему приложению
-- `data/` на корневом уровне - для статических данных и констант приложения
-- `app/` - только для файлов роутинга (page.tsx, layout.tsx, error.tsx и т.д.)
-- Разделение серверных (`lib/cookies.ts`) и клиентских (`lib/cookies-client.ts`) функций
+**Important**: The structure follows Next.js 16 App Router recommendations for scalable projects:
+- `components/` at root level - shared reusable application components
+  - Application components (Header, PropertyCard, CurrencySelect, PriceDisplay) - in root `components/`
+  - `components/ui/` - reusable UI library components (Shadcn UI)
+- `lib/` at root level - for shared utilities used throughout the application
+- `data/` at root level - for static data and application constants
+- `app/` - only for routing files (page.tsx, layout.tsx, error.tsx, etc.)
+- Separation of server (`lib/cookies.ts`) and client (`lib/cookies-client.ts`) functions
 
-**Масштабирование**: При росте проекта компоненты, специфичные для конкретных фич/роутов, можно размещать внутри `app/[feature]/components/` для colocation. Общие компоненты остаются в корневом `components/`.
+**Scaling**: As the project grows, components specific to particular features/routes can be placed inside `app/[feature]/components/` for colocation. Shared components remain in root `components/`.
 
 ```
 PPA Phuket/
-├── app/                          # App Router директория
-│   ├── error.tsx                # Error Boundary (клиентский компонент)
-│   ├── loading.tsx              # Loading UI (серверный компонент)
-│   ├── not-found.tsx            # 404 страница (серверный компонент)
-│   ├── layout.tsx               # Root layout с метаданными и шрифтами
-│   ├── page.tsx                 # Главная страница со списком объектов
-│   └── globals.css              # Глобальные стили и CSS переменные
-├── components/                   # Переиспользуемые компоненты (корневой уровень)
-│   ├── Header.tsx               # Серверный компонент header
-│   ├── CurrencySelect.tsx       # Клиентский компонент выбора валюты
-│   ├── PropertyCard.tsx          # Компонент карточки объекта
-│   ├── PriceDisplay.tsx          # Компонент отображения цены
-│   └── ui/                       # Shadcn UI компоненты (библиотека)
-│       ├── button.tsx            # Компонент Button
-│       ├── card.tsx              # Компонент Card
-│       ├── select.tsx            # Компонент Select
-│       └── skeleton.tsx           # Компонент Skeleton для loading states
-├── lib/                          # Утилиты и вспомогательные функции (корневой уровень)
-│   ├── currency.ts              # Работа с валютами и курсами
-│   ├── cookies.ts               # Серверные функции работы с cookies
-│   ├── cookies-client.ts        # Клиентские функции работы с cookies
-│   └── utils.ts                 # Вспомогательные функции (cn)
-├── data/                         # Данные приложения (корневой уровень)
-│   └── properties.ts            # Захардкоженные данные объектов
-├── public/                       # Статические файлы
-├── package.json                  # Зависимости и скрипты
-├── tsconfig.json                # Конфигурация TypeScript
-├── tailwind.config.ts           # Конфигурация Tailwind CSS
-├── next.config.js               # Конфигурация Next.js
-├── Dockerfile                   # Docker конфигурация
-├── docker-compose.yml          # Docker Compose конфигурация
-└── README.md                    # Инструкция по запуску
+├── app/                          # App Router directory
+│   ├── error.tsx                # Error Boundary (client component)
+│   ├── loading.tsx              # Loading UI (server component)
+│   ├── not-found.tsx            # 404 page (server component)
+│   ├── layout.tsx               # Root layout with metadata and fonts
+│   ├── page.tsx                 # Main page with property list
+│   └── globals.css              # Global styles and CSS variables
+├── components/                   # Reusable components (root level)
+│   ├── Header.tsx               # Server component header
+│   ├── CurrencySelect.tsx       # Client component for currency selection
+│   ├── PropertyCard.tsx          # Property card component
+│   ├── PriceDisplay.tsx          # Price display component
+│   └── ui/                       # Shadcn UI components (library)
+│       ├── button.tsx            # Button component
+│       ├── card.tsx              # Card component
+│       ├── select.tsx            # Select component
+│       └── skeleton.tsx          # Skeleton component for loading states
+├── lib/                          # Utilities and helper functions (root level)
+│   ├── currency.ts              # Currency and exchange rate handling
+│   ├── cookies.ts               # Server-side cookie functions
+│   ├── cookies-client.ts        # Client-side cookie functions
+│   └── utils.ts                 # Helper functions (cn)
+├── data/                         # Application data (root level)
+│   └── properties.ts            # Hardcoded property data
+├── public/                       # Static files
+├── package.json                  # Dependencies and scripts
+├── tsconfig.json                # TypeScript configuration
+├── tailwind.config.ts           # Tailwind CSS configuration
+├── next.config.js               # Next.js configuration
+├── Dockerfile                   # Docker configuration
+├── docker-compose.yml          # Docker Compose configuration
+└── README.md                    # Setup instructions
 ```
 
-## Соответствие Next.js 16 App Router
+## Next.js 16 App Router Compliance
 
-### Специальные файлы конвенций
+### Special Convention Files
 
 #### `app/error.tsx`
-- **Тип**: Клиентский компонент (`'use client'`)
-- **Назначение**: Error Boundary для обработки ошибок
-- **Функциональность**:
-  - Перехватывает ошибки в дочерних компонентах
-  - Отображает пользовательский интерфейс ошибки
-  - Предоставляет кнопку для повторной попытки (`reset()`)
-  - Логирует ошибки в консоль
+- **Type**: Client component (`'use client'`)
+- **Purpose**: Error Boundary for error handling
+- **Functionality**:
+  - Catches errors in child components
+  - Displays error user interface
+  - Provides retry button (`reset()`)
+  - Logs errors to console
 
 #### `app/loading.tsx`
-- **Тип**: Серверный компонент
-- **Назначение**: Loading UI во время загрузки данных
-- **Функциональность**:
-  - Автоматически отображается при переходе между страницами
-  - Показывает skeleton loader для карточек
-  - Улучшает UX во время загрузки
+- **Type**: Server component
+- **Purpose**: Loading UI during data loading
+- **Functionality**:
+  - Automatically displayed when navigating between pages
+  - Shows skeleton loader for cards
+  - Improves UX during loading
 
 #### `app/not-found.tsx`
-- **Тип**: Серверный компонент
-- **Назначение**: 404 страница для несуществующих маршрутов
-- **Функциональность**:
-  - Отображается при обращении к несуществующему маршруту
-  - Предоставляет ссылку на главную страницу
-  - Пользовательский интерфейс ошибки 404
+- **Type**: Server component
+- **Purpose**: 404 page for non-existent routes
+- **Functionality**:
+  - Displayed when accessing non-existent route
+  - Provides link to home page
+  - 404 error user interface
 
-## Архитектура компонентов
+## Component Architecture
 
-### Типы рендеринга
+### Rendering Types
 
 #### Dynamic SSR (Server-Side Rendering)
-- **page.tsx**: Использует `async` функцию для получения cookies
-- Рендерится на сервере при каждом запросе
-- Поддерживает динамические данные (cookies)
+- **page.tsx**: Uses `async` function to get cookies
+- Rendered on server on each request
+- Supports dynamic data (cookies)
 
-#### Server Components (по умолчанию)
-- Все компоненты без `'use client'` являются серверными
-- Рендерятся на сервере
-- Не имеют доступа к браузерным API
-- Меньший размер бандла
+#### Server Components (default)
+- All components without `'use client'` are server components
+- Rendered on server
+- No access to browser APIs
+- Smaller bundle size
 
 #### Client Components
-- Компоненты с директивой `'use client'`
-- Рендерятся на клиенте
-- Имеют доступ к браузерным API и хукам React
-- Используются только когда необходимо
+- Components with `'use client'` directive
+- Rendered on client
+- Have access to browser APIs and React hooks
+- Used only when necessary
 
-### Серверные компоненты (Server Components)
+### Server Components
 
 #### `app/layout.tsx`
-- **Тип рендеринга**: Server Component (SSR)
-- **Назначение**: Root layout приложения
-- **Функциональность**:
-  - Подключение шрифтов через `next/font/google` (Inter, Playfair Display)
-  - Установка CSS переменных для шрифтов
-  - Рендеринг Header и children
-  - Метаданные страницы
-- **Принципы**: KISS - простая структура, одна ответственность
+- **Rendering type**: Server Component (SSR)
+- **Purpose**: Root layout of the application
+- **Functionality**:
+  - Font loading via `next/font/google` (Inter, Playfair Display)
+  - Setting CSS variables for fonts
+  - Rendering Header and children
+  - Page metadata
+- **Principles**: KISS - simple structure, single responsibility
 
 #### `app/page.tsx`
-- **Тип рендеринга**: Dynamic SSR (async функция)
-- **Назначение**: Главная страница со списком объектов
-- **Функциональность**:
-  - Получение выбранной валюты из cookies (server-side)
-  - Рендеринг заголовка и сетки карточек
-  - Передача валюты в каждую карточку
-- **Принципы**: 
-  - SSR для поддержки cookies без мерцания
-  - DRY - переиспользование компонентов PropertyCard
+- **Rendering type**: Dynamic SSR (async function)
+- **Purpose**: Main page with property list
+- **Functionality**:
+  - Getting selected currency from cookies (server-side)
+  - Rendering header and card grid
+  - Passing currency to each card
+- **Principles**: 
+  - SSR for cookie support without flickering
+  - DRY - reusing PropertyCard components
 
-#### `app/components/Header.tsx`
-- **Тип рендеринга**: Server Component (SSR, async)
-- **Назначение**: Header с переключателем валюты
-- **Функциональность**:
-  - Получение текущей валюты из cookies (server-side)
-  - Отображение логотипа и названия
-  - Рендеринг CurrencySelect с начальным значением
-  - Sticky позиционирование с backdrop blur
-- **Принципы**: 
-  - Single Responsibility - только header логика
-  - SSR для получения cookies на сервере
+#### `components/Header.tsx`
+- **Rendering type**: Server Component (SSR, async)
+- **Purpose**: Header with currency selector
+- **Functionality**:
+  - Getting current currency from cookies (server-side)
+  - Displaying logo and title
+  - Rendering CurrencySelect with initial value
+  - Sticky positioning with backdrop blur
+- **Principles**: 
+  - Single Responsibility - only header logic
+  - SSR for getting cookies on server
 
-### Клиентские компоненты (Client Components)
+### Client Components
 
-#### `app/components/CurrencySelect.tsx`
-- **Тип рендеринга**: Client Component (`'use client'`)
-- **Назначение**: Dropdown для выбора валюты
-- **Функциональность**:
-  - Отображение текущей валюты
-  - Обработка изменения валюты
-  - Сохранение выбора в cookies (client-side)
-  - Обновление страницы через `router.refresh()` для SSR
+#### `components/CurrencySelect.tsx`
+- **Rendering type**: Client Component (`'use client'`)
+- **Purpose**: Dropdown for currency selection
+- **Functionality**:
+  - Displaying current currency
+  - Handling currency change
+  - Saving selection to cookies (client-side)
+  - Updating page via `router.refresh()` for SSR
 
-**Ключевые особенности**:
-- Использует `'use client'` директиву (необходимо для интерактивности)
-- Сохраняет валюту в cookies через `setCurrencyCookie()`
-- Вызывает `router.refresh()` для обновления серверных компонентов
-- Использует `useRouter` hook (только в клиентских компонентах)
-- **Принципы**: 
-  - Single Responsibility - только выбор валюты
-  - Минимальный клиентский код (только где необходимо)
+**Key features**:
+- Uses `'use client'` directive (required for interactivity)
+- Saves currency to cookies via `setCurrencyCookie()`
+- Calls `router.refresh()` to update server components
+- Uses `useRouter` hook (only in client components)
+- **Principles**: 
+  - Single Responsibility - only currency selection
+  - Minimal client code (only where necessary)
+- **Optimistic UI**: Updates local state immediately while router.refresh() is in progress
 
-#### `app/components/PropertyCard.tsx`
-- **Тип рендеринга**: Server Component (SSR)
-- **Назначение**: Карточка объекта недвижимости
-- **Функциональность**:
-  - Отображение изображения с градиентом
-  - Показ города поверх изображения (MapPin)
-  - Отображение названия (обрезается на 2 строки)
-  - Показ характеристик (спальни, площадь)
-  - Отображение цены в выбранной валюте
+#### `components/PropertyCard.tsx`
+- **Rendering type**: Server Component (SSR)
+- **Purpose**: Real estate property card
+- **Functionality**:
+  - Displaying image with gradient
+  - Showing city over image (MapPin)
+  - Displaying title (truncated to 2 lines)
+  - Showing features (bedrooms, area)
+  - Displaying price in selected currency
 
-**Ключевые особенности**:
-- Использует Next.js Image для оптимизации изображений
-- Hover эффекты (scale, translate-y, shadow)
-- Градиент поверх изображения для читаемости текста
-- Flexbox layout для прижатия цены к низу
-- `line-clamp-2` для обрезки длинных названий
-- **Принципы**: 
-  - DRY - переиспользуемый компонент
-  - KISS - простая структура, понятная логика
-  - Single Responsibility - только отображение карточки
+**Key features**:
+- Uses Next.js Image for image optimization
+- Hover effects (scale, translate-y, shadow)
+- Gradient over image for text readability
+- Flexbox layout to push price to bottom
+- `line-clamp-2` for truncating long titles
+- **Principles**: 
+  - DRY - reusable component
+  - KISS - simple structure, clear logic
+  - Single Responsibility - only card display
 
-#### `app/components/PriceDisplay.tsx`
-- **Тип рендеринга**: Server Component (SSR)
-- **Назначение**: Отображение цены с форматированием
-- **Функциональность**:
-  - Конвертация цены из THB в выбранную валюту
-  - Форматирование с символом валюты
-  - Поддержка кастомных классов
-- **Принципы**: 
-  - DRY - переиспользуемый компонент для отображения цены
-  - Single Responsibility - только форматирование и отображение цены
-  - Pure function - нет side effects, только преобразование данных
+#### `components/PriceDisplay.tsx`
+- **Rendering type**: Server Component (SSR)
+- **Purpose**: Price display with formatting
+- **Functionality**:
+  - Converting price from THB to selected currency
+  - Formatting with currency symbol using Intl.NumberFormat
+  - Support for custom classes
+- **Principles**: 
+  - DRY - reusable component for price display
+  - Single Responsibility - only price formatting and display
+  - Pure function - no side effects, only data transformation
 
-## Работа с данными
+## Data Handling
 
 ### `data/properties.ts`
 
-Интерфейс Property:
+Property interface:
 ```typescript
 interface Property {
   id: string
   title: string
-  price: number        // Цена в THB
-  area: number         // Площадь в м²
-  bedrooms: number     // Количество спален
-  location: string     // Город/локация
-  imageUrl: string     // URL изображения
+  price: number        // Price in THB
+  area: number         // Area in m²
+  bedrooms: number     // Number of bedrooms
+  location: string     // City/location
+  imageUrl: string     // Image URL
 }
 ```
 
 ### `lib/currency.ts`
 
-**Функции**:
-- `convertCurrency(priceInThb, targetCurrency)` - конвертация цены
-- `formatPrice(price, currency)` - форматирование с символом валюты
+**Functions**:
+- `convertCurrency(priceInThb, targetCurrency)` - price conversion
+- `formatPrice(price, currency)` - formatting with currency symbol using Intl.NumberFormat
 
-**Константы**:
-- `CURRENCY_RATES` - курсы валют (THB, USD, EUR, RUB)
-- `CURRENCY_SYMBOLS` - символы валют
+**Constants**:
+- `CURRENCY_RATES` - exchange rates (THB, USD, EUR, RUB)
+- `CURRENCY_CODES` - currency codes for Intl.NumberFormat
 
-### `lib/cookies.ts` и `lib/cookies-client.ts`
+### `lib/cookies.ts` and `lib/cookies-client.ts`
 
-**Разделение серверных и клиентских функций**:
+**Separation of server and client functions**:
 
 - `cookies.ts` (server-side):
-  - `getCurrencyFromCookies()` - получение валюты из cookies на сервере
-  - Использует `next/headers` API
+  - `getCurrencyFromCookies()` - getting currency from cookies on server
+  - Uses `next/headers` API
 
 - `cookies-client.ts` (client-side):
-  - `setCurrencyCookie()` - установка валюты в cookies на клиенте
-  - Использует `document.cookie` API
-  - Помечен директивой `'use client'`
+  - `setCurrencyCookie()` - setting currency in cookies on client
+  - Uses `document.cookie` API
+  - Marked with `'use client'` directive
 
-## Работа с валютами
+## Currency Handling
 
-### Механизм сохранения валюты
+### Currency Persistence Mechanism
 
-1. **При загрузке страницы**:
-   - Серверный компонент `Header` и `page.tsx` получают валюту из cookies через `getCurrencyFromCookies()`
-   - Если cookie нет, используется дефолтное значение `THB`
-   - Страница рендерится с правильной валютой на сервере
+1. **On page load**:
+   - Server components `Header` and `page.tsx` get currency from cookies via `getCurrencyFromCookies()`
+   - If cookie doesn't exist, default value `THB` is used
+   - Page is rendered with correct currency on server
 
-2. **При изменении валюты**:
-   - Клиентский компонент `CurrencySelect` сохраняет выбор в cookies через `setCurrencyCookie()`
-   - Вызывается `router.refresh()` для обновления серверных компонентов
-   - Страница перерендеривается с новой валютой без полной перезагрузки
+2. **On currency change**:
+   - Client component `CurrencySelect` saves selection to cookies via `setCurrencyCookie()`
+   - `router.refresh()` is called to update server components
+   - Page re-renders with new currency without full reload
 
-3. **SSR без мерцания**:
-   - Так как сервер знает выбранную валюту из cookies, нет гидратации с дефолтным значением
-   - Цены отображаются правильно с первого рендера
+3. **SSR without flickering**:
+   - Since server knows selected currency from cookies, there's no hydration with default value
+   - Prices are displayed correctly from first render
 
-## Стилизация
+## Styling
 
-### Цветовая схема
+### Color Scheme
 
-Определена в `app/globals.css` через CSS переменные:
-- Теплая цветовая палитра (золотые оттенки для primary)
-- Поддержка темной темы
-- Использование HSL значений для гибкости
+Defined in `app/globals.css` via CSS variables:
+- Warm color palette (golden tones for primary)
+- Dark theme support
+- Using HSL values for flexibility
 
-### Шрифты
+### Fonts
 
-- **Playfair Display** - для заголовков (display font)
-- **Inter** - для основного текста (body font)
-- Загружаются через `next/font/google` для оптимизации
+- **Playfair Display** - for headings (display font)
+- **Inter** - for body text (body font)
+- Loaded via `next/font/google` for optimization
 
 ### Tailwind CSS
 
-Конфигурация в `tailwind.config.ts`:
-- Кастомные цвета через CSS переменные
-- Кастомные шрифты (display, body)
-- Анимации (fade-in, accordion)
-- Поддержка dark mode
+Configuration in `tailwind.config.ts`:
+- Custom colors via CSS variables
+- Custom fonts (display, body)
+- Animations (fade-in, accordion)
+- Dark mode support
 
-### Компоненты карточек
+### Card Components
 
-**Структура карточки**:
+**Card structure**:
 ```
 Card (flex flex-col h-full)
 ├── Image Container (aspect-[4/3])
 │   ├── Image (Next.js Image)
 │   ├── Gradient Overlay
-│   └── Location Badge (MapPin + текст)
+│   └── Location Badge (MapPin + text)
 └── CardContent (flex flex-col flex-1)
     ├── Title (line-clamp-2)
     └── Bottom Section (mt-auto)
-        ├── Features (спальни, площадь)
-        └── Price (с разделителем сверху)
+        ├── Features (bedrooms, area)
+        └── Price (with top separator)
 ```
 
-**Ключевые стили**:
-- `h-full flex flex-col` на Card - растягивание на всю высоту
-- `flex-1 flex-col` на CardContent - занимает доступное пространство
-- `mt-auto` на нижнем блоке - прижимает к низу
-- `line-clamp-2` на заголовке - обрезка на 2 строки
-- `aspect-[4/3]` на изображении - фиксированное соотношение сторон
+**Key styles**:
+- `h-full flex flex-col` on Card - stretches to full height
+- `flex-1 flex-col` on CardContent - takes available space
+- `mt-auto` on bottom block - pushes to bottom
+- `line-clamp-2` on title - truncates to 2 lines
+- `aspect-[4/3]` on image - fixed aspect ratio
 
-## Оптимизация изображений
+## Image Optimization
 
 ### Next.js Image
 
-- Используется компонент `Image` из `next/image`
-- Автоматическая оптимизация и lazy loading
-- Responsive sizes для разных экранов
-- Настроены разрешенные домены в `next.config.js`:
+- Uses `Image` component from `next/image`
+- Automatic optimization and lazy loading
+- Responsive sizes for different screens
+- Allowed domains configured in `next.config.js`:
   - `images.unsplash.com`
 
-## Docker конфигурация
+## Docker Configuration
 
 ### Dockerfile
 
 Multi-stage build:
-1. **deps** - установка зависимостей через bun
-2. **builder** - сборка приложения
-3. **runner** - production образ с минимальными зависимостями
+1. **deps** - dependency installation via bun
+2. **builder** - application build
+3. **runner** - production image with minimal dependencies
 
-Использует `oven/bun:latest` образ для всех стадий.
+Uses `oven/bun:latest` image for all stages.
 
 ### docker-compose.yml
 
-Простая конфигурация для запуска контейнера с портом 3000.
+Simple configuration for running container on port 3000.
 
-## Принципы проектирования
+## Design Principles
 
-### SOLID принципы
+### SOLID Principles
 
 1. **Single Responsibility Principle (SRP)**
-   - Каждый компонент имеет одну ответственность
-   - `PriceDisplay` - только отображение цены
-   - `CurrencySelect` - только выбор валюты
-   - `PropertyCard` - только отображение карточки
-   - Разделение серверных и клиентских функций (cookies.ts / cookies-client.ts)
+   - Each component has single responsibility
+   - `PriceDisplay` - only price display
+   - `CurrencySelect` - only currency selection
+   - `PropertyCard` - only card display
+   - Separation of server and client functions (cookies.ts / cookies-client.ts)
 
 2. **Open/Closed Principle (OCP)**
-   - Компоненты открыты для расширения через props
-   - `PriceDisplay` принимает `className` для кастомизации
-   - Типы валют легко расширяемы через enum
+   - Components open for extension via props
+   - `PriceDisplay` accepts `className` for customization
+   - Currency types easily extensible via enum
 
 3. **Liskov Substitution Principle (LSP)**
-   - Интерфейсы Property и Currency обеспечивают контракты
-   - Компоненты работают с любыми данными, соответствующими интерфейсам
+   - Property and Currency interfaces provide contracts
+   - Components work with any data matching interfaces
 
 4. **Interface Segregation Principle (ISP)**
-   - Узкие интерфейсы (PropertyCardProps, PriceDisplayProps)
-   - Компоненты получают только необходимые props
+   - Narrow interfaces (PropertyCardProps, PriceDisplayProps)
+   - Components receive only necessary props
 
 5. **Dependency Inversion Principle (DIP)**
-   - Компоненты зависят от абстракций (интерфейсы, типы)
-   - Утилиты изолированы и переиспользуемы
+   - Components depend on abstractions (interfaces, types)
+   - Utilities isolated and reusable
 
 ### DRY (Don't Repeat Yourself)
 
-- Переиспользование компонентов (`PropertyCard`, `PriceDisplay`)
-- Общие утилиты (`currency.ts`, `utils.ts`)
-- Единая логика форматирования цен
-- Общие стили через Tailwind классы
+- Component reuse (`PropertyCard`, `PriceDisplay`)
+- Shared utilities (`currency.ts`, `utils.ts`)
+- Unified price formatting logic
+- Shared styles via Tailwind classes
 
 ### KISS (Keep It Simple, Stupid)
 
-- Простая структура проекта
-- Минимум абстракций
-- Понятная иерархия компонентов
-- Прямолинейная логика без излишней сложности
+- Simple project structure
+- Minimal abstractions
+- Clear component hierarchy
+- Straightforward logic without unnecessary complexity
 
-## Особенности реализации
+## Implementation Features
 
-### SSR без мерцания
+### SSR without Flickering
 
-- Использование cookies вместо localStorage для SSR
-- Серверные компоненты получают валюту на этапе рендеринга
-- Нет гидратации с дефолтным значением
-- Dynamic SSR для поддержки cookies
+- Using cookies instead of localStorage for SSR
+- Server components get currency at rendering stage
+- No hydration with default value
+- Dynamic SSR for cookie support
 
-### Типобезопасность
+### Type Safety
 
-- Строгая типизация TypeScript (`strict: true`)
-- Типы для валют (`Currency`)
-- Интерфейсы для данных (`Property`)
-- Типизированные props для всех компонентов
+- Strict TypeScript typing (`strict: true`)
+- Types for currencies (`Currency`)
+- Interfaces for data (`Property`)
+- Typed props for all components
 
-### Производительность
+### Performance
 
-- Серверные компоненты по умолчанию (меньший бандл)
-- Клиентские компоненты только где необходимо (интерактивность)
-- Оптимизация изображений через Next.js Image
-- Lazy loading изображений
-- Loading states для улучшения UX
+- Server components by default (smaller bundle)
+- Client components only where necessary (interactivity)
+- Image optimization via Next.js Image
+- Lazy loading images
+- Loading states for improved UX
 
-### Доступность
+### Accessibility
 
-- Семантическая HTML разметка
-- Alt текст для изображений
-- Правильная структура заголовков
-- Error boundaries для обработки ошибок
-- 404 страница для несуществующих маршрутов
+- Semantic HTML markup
+- Alt text for images
+- Proper heading structure
+- Error boundaries for error handling
+- 404 page for non-existent routes
 
-## Потоки данных
+## Data Flow
 
-### Загрузка страницы
+### Page Load
 
 ```
 1. Browser Request
    ↓
 2. Next.js Server
-   ├── Header получает валюту из cookies
-   ├── page.tsx получает валюту из cookies
-   └── Рендеринг с правильной валютой
+   ├── Header gets currency from cookies
+   ├── page.tsx gets currency from cookies
+   └── Rendering with correct currency
    ↓
-3. HTML Response (с правильными ценами)
+3. HTML Response (with correct prices)
    ↓
-4. Hydration (только клиентские компоненты)
+4. Hydration (only client components)
 ```
 
-### Изменение валюты
+### Currency Change
 
 ```
-1. User выбирает валюту в CurrencySelect
+1. User selects currency in CurrencySelect
    ↓
-2. setCurrencyCookie() сохраняет в cookies
+2. setCurrencyCookie() saves to cookies
    ↓
-3. router.refresh() обновляет серверные компоненты
+3. router.refresh() updates server components
    ↓
-4. Серверные компоненты получают новую валюту из cookies
+4. Server components get new currency from cookies
    ↓
-5. Перерендер с новыми ценами (без полной перезагрузки)
+5. Re-render with new prices (without full reload)
 ```
 
-## Зависимости
+## Dependencies
 
-### Основные
-- `next@16` - Next.js фреймворк
-- `react@18` - React библиотека
+### Core
+- `next@16` - Next.js framework
+- `react@18` - React library
 - `react-dom@18` - React DOM
 
-### UI компоненты
-- `@radix-ui/react-select` - Select компонент
-- `@radix-ui/react-slot` - Slot компонент для Button
-- `lucide-react` - Иконки
-- `tailwindcss-animate` - Анимации для Tailwind
+### UI Components
+- `@radix-ui/react-select` - Select component
+- `@radix-ui/react-slot` - Slot component for Button
+- `lucide-react` - Icons
+- `tailwindcss-animate` - Animations for Tailwind
 
-### Утилиты
-- `class-variance-authority` - Управление классами
-- `clsx` - Условные классы
-- `tailwind-merge` - Слияние Tailwind классов
+### Utilities
+- `class-variance-authority` - Class management
+- `clsx` - Conditional classes
+- `tailwind-merge` - Tailwind class merging
 
-## Конфигурационные файлы
+## Configuration Files
 
 ### `next.config.js`
-- `output: 'standalone'` - для Docker
-- `images.remotePatterns` - разрешенные домены для изображений
+- `output: 'standalone'` - for Docker
+- `images.remotePatterns` - allowed image domains
 
 ### `tsconfig.json`
-- `strict: true` - строгий режим TypeScript
-- `paths` - алиасы для импортов (`@/*`)
+- `strict: true` - TypeScript strict mode
+- `paths` - import aliases (`@/*`)
 
 ### `tailwind.config.ts`
-- Кастомные цвета, шрифты, анимации
-- Поддержка dark mode
-- Плагин `tailwindcss-animate`
+- Custom colors, fonts, animations
+- Dark mode support
+- `tailwindcss-animate` plugin
 
-## Команды запуска
+## Run Commands
 
-### Разработка
+### Development
 ```bash
 bun install && bun dev
 ```
@@ -484,11 +485,11 @@ bun run build && bun run start
 docker-compose up
 ```
 
-## Будущие улучшения
+## Future Improvements
 
-1. Добавление фильтров по цене, площади, количеству спален
-2. Пагинация или бесконечная прокрутка
-3. Детальная страница объекта
-4. Поиск по названию/локации
-5. Сортировка объектов
-6. Интеграция с реальным API вместо захардкоженных данных
+1. Adding filters by price, area, number of bedrooms
+2. Pagination or infinite scroll
+3. Property detail page
+4. Search by title/location
+5. Property sorting
+6. Integration with real API instead of hardcoded data

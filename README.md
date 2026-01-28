@@ -1,39 +1,39 @@
-# Недвижимость Пхукет
+# Real Estate Phuket
 
-Мини-приложение для отображения списка объектов недвижимости с возможностью переключения валюты.
+Mini-application for displaying a list of real estate properties with currency switching capability.
 
-## Требования
+## Requirements
 
 - **Node.js** >= 20.0.0
 - **Bun** >= 1.0.0
 
-## Запуск проекта
+## Running the Project
 
-### Разработка
+### Development
 
 ```bash
 bun install && bun dev
 ```
 
-Приложение будет доступно по адресу [http://localhost:3000](http://localhost:3000)
+The application will be available at [http://localhost:3000](http://localhost:3000)
 
-### Production сборка
+### Production Build
 
 ```bash
 bun run build
 bun run start
 ```
 
-### Запуск через Docker
+### Running with Docker
 
 ```bash
-# Через Docker Compose
+# Using Docker Compose
 docker-compose up
 
-# Или через Docker напрямую
+# Or directly with Docker
 docker build -t real-estate-app . && docker run -p 3000:3000 real-estate-app
 ```
 
-## Документация
+## Documentation
 
-Подробная документация по архитектуре проекта доступна в [docs/architecture.md](./docs/architecture.md).
+Detailed project architecture documentation is available in [docs/architecture.md](./docs/architecture.md).
