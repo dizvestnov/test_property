@@ -8,12 +8,12 @@ interface PriceDisplayProps {
 }
 
 /**
- * Компонент для отображения цены с конвертацией валюты
+ * Component for displaying price with currency conversion
  * 
- * Рендеринг: Server Component (SSR)
- * - Чистая функция без side effects
- * - Выполняет конвертацию и форматирование на сервере
- * - Переиспользуемый компонент (DRY принцип)
+ * Rendering: Server Component (SSR)
+ * - Pure function without side effects
+ * - Performs conversion and formatting on the server
+ * - Reusable component (DRY principle)
  */
 export function PriceDisplay({ priceInThb, currency, className }: PriceDisplayProps) {
   const convertedPrice = convertCurrency(priceInThb, currency)

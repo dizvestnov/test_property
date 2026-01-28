@@ -12,12 +12,12 @@ interface PropertyCardProps {
 }
 
 /**
- * Компонент карточки объекта недвижимости
+ * Property card component
  * 
- * Рендеринг: Server Component (SSR)
- * - Рендерится на сервере
- * - Использует Next.js Image для оптимизации
- * - Принимает валюту как prop от родительского серверного компонента
+ * Rendering: Server Component (SSR)
+ * - Rendered on the server
+ * - Uses Next.js Image for optimization
+ * - Receives currency as prop from parent server component
  */
 export function PropertyCard({ property, currency, index }: PropertyCardProps) {
   return (

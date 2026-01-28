@@ -1,8 +1,8 @@
 import { Skeleton } from '@/components/ui/skeleton'
 
 /**
- * Loading UI для главной страницы
- * Отображается во время загрузки данных
+ * Loading UI for the main page
+ * Displayed during data loading
  */
 export default function Loading() {
   return (

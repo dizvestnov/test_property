@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { type Currency } from '@/lib/currency'
 import { setCurrencyCookie } from '@/lib/cookies-client'
@@ -16,19 +17,29 @@ interface CurrencySelectProps {
 }
 
 /**
- * Клиентский компонент для выбора валюты
+ * Client component for currency selection with optimistic UI
+ * Updates local state immediately while router.refresh() is in progress
  */
 export function CurrencySelect({ currentCurrency }: CurrencySelectProps) {
   const router = useRouter()
+  const [optimisticCurrency, setOptimisticCurrency] = useState<Currency>(currentCurrency)
+
+  // Sync optimistic state with server value when it updates
+  useEffect(() => {
+    setOptimisticCurrency(currentCurrency)
+  }, [currentCurrency])
 
   const handleCurrencyChange = (value: string) => {
     const currency = value as Currency
+    // Optimistic update - update UI immediately
+    setOptimisticCurrency(currency)
+    // Save to cookie and refresh server components
     setCurrencyCookie(currency)
     router.refresh()
   }
 
   return (
-    <Select value={currentCurrency} onValueChange={handleCurrencyChange}>
+    <Select value={optimisticCurrency} onValueChange={handleCurrencyChange}>
       <SelectTrigger className="w-[140px]">
         <SelectValue />
       </SelectTrigger>

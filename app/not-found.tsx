@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Home } from 'lucide-react'
 
 /**
- * 404 страница для несуществующих маршрутов
+ * 404 page for non-existent routes
  */
 export default function NotFound() {
   return (

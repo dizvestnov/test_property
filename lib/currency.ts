@@ -7,29 +7,34 @@ export const CURRENCY_RATES: Record<Currency, number> = {
   RUB: 2.57,
 }
 
-export const CURRENCY_SYMBOLS: Record<Currency, string> = {
-  THB: '฿',
-  USD: '$',
-  EUR: '€',
-  RUB: '₽',
+/**
+ * Currency codes for Intl.NumberFormat
+ */
+const CURRENCY_CODES: Record<Currency, string> = {
+  THB: 'THB',
+  USD: 'USD',
+  EUR: 'EUR',
+  RUB: 'RUB',
 }
 
 /**
- * Конвертирует цену из THB в указанную валюту
+ * Converts price from THB to the specified currency
  */
 export function convertCurrency(priceInThb: number, targetCurrency: Currency): number {
   return priceInThb * CURRENCY_RATES[targetCurrency]
 }
 
 /**
- * Форматирует цену с символом валюты
+ * Formats price with currency symbol using Intl.NumberFormat
+ * Uses currency style for proper localization
  */
 export function formatPrice(price: number, currency: Currency): string {
-  const symbol = CURRENCY_SYMBOLS[currency]
+  const currencyCode = CURRENCY_CODES[currency]
   
   return new Intl.NumberFormat('ru-RU', {
-    style: 'decimal',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(price) + ` ${symbol}`
+    style: 'currency',
+    currency: currencyCode,
+    minimumFractionDigits: currency === 'USD' || currency === 'EUR' ? 2 : 0,
+    maximumFractionDigits: currency === 'USD' || currency === 'EUR' ? 2 : 0,
+  }).format(price)
 }

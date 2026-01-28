@@ -5,7 +5,7 @@ const CURRENCY_COOKIE_NAME = 'selected-currency'
 const DEFAULT_CURRENCY: Currency = 'THB'
 
 /**
- * Получает выбранную валюту из cookies (server-side)
+ * Gets selected currency from cookies (server-side)
  */
 export async function getCurrencyFromCookies(): Promise<Currency> {
   const cookieStore = await cookies()
@@ -19,7 +19,7 @@ export async function getCurrencyFromCookies(): Promise<Currency> {
 }
 
 /**
- * Проверяет, является ли строка валидной валютой
+ * Checks if a string is a valid currency
  */
 function isValidCurrency(value: string): value is Currency {
   return ['THB', 'USD', 'EUR', 'RUB'].includes(value)

@@ -24,10 +24,10 @@ export const metadata: Metadata = {
 /**
  * Root Layout
  * 
- * Рендеринг: Server Component (SSR)
- * - Рендерится на сервере
- * - Настраивает шрифты и глобальные стили
- * - Оборачивает все страницы
+ * Rendering: Server Component (SSR)
+ * - Rendered on the server
+ * - Configures fonts and global styles
+ * - Wraps all pages
  */
 export default function RootLayout({
   children,

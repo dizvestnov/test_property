@@ -3,12 +3,12 @@ import { properties } from '@/data/properties'
 import { PropertyCard } from '@/components/PropertyCard'
 
 /**
- * Главная страница со списком объектов недвижимости
+ * Main page with list of real estate properties
  * 
- * Рендеринг: Dynamic SSR
- * - Использует async для получения cookies (динамические данные)
- * - Рендерится на сервере при каждом запросе
- * - Поддерживает SSR без мерцания благодаря cookies
+ * Rendering: Dynamic SSR
+ * - Uses async to get cookies (dynamic data)
+ * - Rendered on the server on each request
+ * - Supports SSR without flickering thanks to cookies
  */
 export default async function HomePage() {
   const currency = await getCurrencyFromCookies()

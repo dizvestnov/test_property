@@ -4,12 +4,12 @@ import { getCurrencyFromCookies } from '@/lib/cookies'
 import { CurrencySelect } from '@/components/CurrencySelect'
 
 /**
- * Серверный компонент Header с переключателем валюты
+ * Server component Header with currency selector
  * 
- * Рендеринг: Server Component (SSR)
- * - Получает валюту из cookies на сервере
- * - Рендерится на сервере при каждом запросе
- * - Передает начальное значение валюты клиентскому CurrencySelect
+ * Rendering: Server Component (SSR)
+ * - Gets currency from cookies on the server
+ * - Rendered on the server on each request
+ * - Passes initial currency value to client CurrencySelect component
  */
 export async function Header() {
   const currentCurrency = await getCurrencyFromCookies()

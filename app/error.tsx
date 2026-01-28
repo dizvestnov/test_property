@@ -4,8 +4,8 @@ import { useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 
 /**
- * Error Boundary для обработки ошибок в приложении
- * Клиентский компонент для обработки ошибок
+ * Error Boundary for handling errors in the application
+ * Client component for error handling
  */
 export default function Error({
   error,
